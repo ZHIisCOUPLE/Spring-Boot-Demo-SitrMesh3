@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xiaojf.springboot.mybatisplus.mapper.UserMapper">
+    <resultMap id="userAddr" type="cn.xiaojf.springboot.mybatisplus.entity.User">
+        <id column="user_id" property="id"></id>
+        <result column="user_name" property="name"></result>
+        <result column="user_age" property="age"></result>
+        <collection property="userAddrList" ofType="cn.xiaojf.springboot.mybatisplus.entity.UserAddr">
+            <id column="addr_id" property="id"></id>
+            <result column="addr_name" property="name"></result>
+            <result column="user_id" property="userId"></result>
+        </collection>
+    </resultMap>
+
+    <select id="findByUserName" resultType="cn.xiaojf.springboot.mybatisplus.entity.User">
+      SELECT * FROM sys_user
+    </select>
+
+    <select id="findUserAddrByName" resultMap="userAddr">
+        SELECT
+            u.id AS user_id,u.`name` AS user_name ,u.age AS user_age,addr.`name` AS addr_name,addr.id AS addr_id
+        FROM
+            sys_user u
+        LEFT JOIN sys_user_addr addr ON u.id = addr.user_id
+        WHERE
+          u.name = #{name}
+    </select>
+
+</mapper>
